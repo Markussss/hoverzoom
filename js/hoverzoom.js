@@ -403,6 +403,11 @@ var hoverZoom = {
                                 //}
                             }
                             imgDetails.url = src;
+
+                            if (isVideoLink(imgDetails.url) && !options.zoomVideos) { // if we have a video link and don't want to zoom videos, don't do any of the loading
+                                return;
+                            }
+
                             clearTimeout(loadFullSizeImageTimeout);
 
                             // If the action key has been pressed over an image, no delay is applied

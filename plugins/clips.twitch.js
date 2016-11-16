@@ -6,6 +6,9 @@ hoverZoomPlugins.push({
           var link = this;
           if (link.href.indexOf('reddit.com') !== -1) return;
           if (!link.classList.contains('hoverZoomLink')) {
+              if (!options.zoomVideos) {
+                  return link.href;
+              }
               hoverZoom.prepareFromDocument($(link), link.href, function (doc) {
                   var meta = doc.querySelector('meta[property="og:image"][content]');
                   link.classList.remove('hoverZoomLink');
