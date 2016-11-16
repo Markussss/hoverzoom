@@ -46,7 +46,8 @@ var hoverZoom = {
             skipFadeIn = false,
             titledElements = null,
             body100pct = true,
-            linkRect = null;
+            linkRect = null,
+            deltaTimeMouseWheel = 0;
         /*panning = true,
          panningThumb = null;*/
 
@@ -980,19 +981,25 @@ var hoverZoom = {
                 var link = hz.currentLink, data = link.data();
                 if (data.hoverZoomGallerySrc && data.hoverZoomGallerySrc.length !== 1) {
                     event.preventDefault();
-                    if (event.originalEvent.wheelDeltaY > 0) {
-                        rotateGalleryImg(-1);
-                    } else {
-                        rotateGalleryImg(1);
+                    if (deltaTimeMouseWheel === 0 || Date.now() - deltaTimeMouseWheel > 150) { // this limits scrolling through videos and albums to once per 150ms. might need to be adjusted.
+                        if (event.originalEvent.wheelDeltaY > 0) {
+                            rotateGalleryImg(-1);
+                        } else {
+                            rotateGalleryImg(1);
+                        }
+                        deltaTimeMouseWheel = Date.now();
                     }
                 } else {
                     var video = hz.hzImg.find('video').get(0);
                     if (video && !options.disableMouseWheelForVideo) {
                         event.preventDefault();
-                        if (event.originalEvent.wheelDeltaY > 0) {
-                            changeVideoPosition(-parseInt(options.videoPositionStep));
-                        } else {
-                            changeVideoPosition(parseInt(options.videoPositionStep));
+                        if (deltaTimeMouseWheel === 0 || Date.now() - deltaTimeMouseWheel > 150) { // this limits scrolling through videos and albums to once per 150ms. might need to be adjusted.
+                            if (event.originalEvent.wheelDeltaY > 0) {
+                                changeVideoPosition(-parseInt(options.videoPositionStep));
+                            } else {
+                                changeVideoPosition(parseInt(options.videoPositionStep));
+                            }
+                            deltaTimeMouseWheel = Date.now();
                         }
                     }
                 }
